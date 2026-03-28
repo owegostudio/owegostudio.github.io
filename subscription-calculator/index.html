@@ -1,140 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Subscription Cost Calculator</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<!-- Tailwind CDN -->
-<script src="https://cdn.tailwindcss.com"></script>
-
-<style>
-    body {
-        background: #f8fafc;
-    }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscription Cost Calculator – Early Access</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Inter, Arial, sans-serif;
+            background: #0D0D0F;
+            color: #FFFFFF;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        h1 {
+            font-size: 2.4rem;
+            margin-bottom: 10px;
+            color: #1FB7FF;
+        }
+        h2 {
+            font-size: 1.4rem;
+            font-weight: 400;
+            color: #C7C7C7;
+            margin-bottom: 30px;
+        }
+        .section {
+            margin-bottom: 40px;
+        }
+        .cta-box {
+            background: #111218;
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid #1FB7FF33;
+            margin-top: 20px;
+        }
+        .cta-box h3 {
+            margin-top: 0;
+            color: #3A3FEE;
+        }
+        .cta-button {
+            display: inline-block;
+            background: #3A3FEE;
+            color: white;
+            padding: 12px 22px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+        .footer {
+            margin-top: 60px;
+            font-size: 0.9rem;
+            color: #777;
+            text-align: center;
+        }
+    </style>
 </head>
 
-<body class="min-h-screen flex items-center justify-center p-6">
+<body>
+    <div class="container">
 
-<div class="bg-white shadow-xl rounded-xl p-8 w-full max-w-2xl">
-    <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">
-        Subscription Cost Calculator
-    </h1>
+        <h1>Subscription Cost Calculator</h1>
+        <h2>A simple tool to track and understand your recurring expenses.</h2>
 
-    <!-- Form -->
-    <div class="space-y-4">
-        <div>
-            <label class="block text-gray-700 font-medium">Subscription Name</label>
-            <input id="name" type="text" class="w-full mt-1 p-3 border rounded-lg" placeholder="Netflix, Spotify, etc">
+        <div class="section">
+            <p>
+                This is the early-access page for the Subscription Cost Calculator.  
+                The MVP version is available to use right now, and a full-featured version is in development.
+            </p>
         </div>
 
-        <div>
-            <label class="block text-gray-700 font-medium">Cost</label>
-            <input id="cost" type="number" class="w-full mt-1 p-3 border rounded-lg" placeholder="9.99">
+        <div class="section">
+            <h3>Planned Features</h3>
+            <ul>
+                <li>Automatic saving of your subscriptions</li>
+                <li>Categories + color-coded groups</li>
+                <li>Monthly and yearly analytics</li>
+                <li>Charts and visual breakdowns</li>
+                <li>Renewal reminders</li>
+                <li>Export to CSV or PDF</li>
+                <li>Dark mode + custom themes</li>
+                <li>Cloud sync across devices</li>
+            </ul>
         </div>
 
-        <div>
-            <label class="block text-gray-700 font-medium">Billing Cycle</label>
-            <select id="cycle" class="w-full mt-1 p-3 border rounded-lg">
-                <option value="monthly">Monthly</option>
-                <option value="yearly">Yearly</option>
-            </select>
+        <div class="cta-box">
+            <h3>Try the MVP</h3>
+            <p>Use the current version of the tool right now.</p>
+            <a class="cta-button" href="tool.html">Open the Tool</a>
         </div>
 
-        <button onclick="addSubscription()" 
-            class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
-            Add Subscription
-        </button>
+        <div class="cta-box">
+            <h3>Join the Waitlist</h3>
+            <p>Get early access to the full version and help shape the roadmap.</p>
+            <a class="cta-button" href="[YOUR GOOGLE FORM LINK]" target="_blank">Join the Waitlist</a>
+        </div>
+
+        <div class="footer">
+            Owego Studio — Practical Tools. Real Results.
+        </div>
+
     </div>
-
-    <!-- Results -->
-    <div class="mt-10">
-        <h2 class="text-2xl font-bold text-gray-800 mb-4">Your Subscriptions</h2>
-        <div id="list" class="space-y-3"></div>
-    </div>
-
-    <!-- Totals -->
-    <div class="mt-10 p-6 bg-gray-100 rounded-lg">
-        <h2 class="text-xl font-bold text-gray-800 mb-4">Totals</h2>
-
-        <p class="text-gray-700 text-lg">
-            Monthly Total: <span id="monthlyTotal" class="font-bold">£0.00</span>
-        </p>
-        <p class="text-gray-700 text-lg">
-            Yearly Total: <span id="yearlyTotal" class="font-bold">£0.00</span>
-        </p>
-    </div>
-</div>
-
-<script>
-let subscriptions = [];
-
-function addSubscription() {
-    const name = document.getElementById("name").value.trim();
-    const cost = parseFloat(document.getElementById("cost").value);
-    const cycle = document.getElementById("cycle").value;
-
-    if (!name || !cost) {
-        alert("Please enter a valid name and cost");
-        return;
-    }
-
-    subscriptions.push({ name, cost, cycle });
-    renderList();
-    calculateTotals();
-
-    document.getElementById("name").value = "";
-    document.getElementById("cost").value = "";
-}
-
-function renderList() {
-    const list = document.getElementById("list");
-    list.innerHTML = "";
-
-    subscriptions.forEach((sub, index) => {
-        const div = document.createElement("div");
-        div.className = "p-4 bg-white border rounded-lg flex justify-between items-center";
-
-        div.innerHTML = `
-            <div>
-                <p class="font-semibold text-gray-800">${sub.name}</p>
-                <p class="text-gray-600 text-sm">£${sub.cost.toFixed(2)} / ${sub.cycle}</p>
-            </div>
-            <button onclick="removeSubscription(${index})"
-                class="text-red-600 font-semibold hover:underline">
-                Remove
-            </button>
-        `;
-
-        list.appendChild(div);
-    });
-}
-
-function removeSubscription(index) {
-    subscriptions.splice(index, 1);
-    renderList();
-    calculateTotals();
-}
-
-function calculateTotals() {
-    let monthly = 0;
-    let yearly = 0;
-
-    subscriptions.forEach(sub => {
-        if (sub.cycle === "monthly") {
-            monthly += sub.cost;
-            yearly += sub.cost * 12;
-        } else {
-            yearly += sub.cost;
-            monthly += sub.cost / 12;
-        }
-    });
-
-    document.getElementById("monthlyTotal").textContent = "£" + monthly.toFixed(2);
-    document.getElementById("yearlyTotal").textContent = "£" + yearly.toFixed(2);
-}
-</script>
-
 </body>
 </html>
